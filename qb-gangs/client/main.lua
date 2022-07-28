@@ -85,31 +85,29 @@ RegisterNetEvent("fl-gangs:client:VehicleList", function()
         exports['qb-menu']:openMenu(VehicleList)
 end)
 
-CreateThread(function()
+Citizen.CreateThread(function()
     while true do
-        Wait(0)
+        Citizen.Wait(0)
         if isLoggedIn and PlayerGang.name ~= "none" then
-        	if Config.Gangs[PlayerGang.name] ~= nil then
-	            v = Config.stash[PlayerGang.name]
-	            ped = PlayerPedId()
-	            pos = GetEntityCoords(ped)
+            v = Config.stash[PlayerGang.name]
+            ped = PlayerPedId()
+            pos = GetEntityCoords(ped)
 
-	            stashdist = #(pos - vector3(v.x, v.y, v.z))
-	            if stashdist < 5.0 then
-	                DrawMarker(2, v.x, v.y, v.z - 0.2 , 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, 200, 200, 200, 222, false, false, false, true, false, false, false)
-	                if stashdist < 1.5 then
-	                    QBCore.Functions.DrawText3D(v.x, v.y, v.z, "[~g~E~w~] - Stash")
-	                    currentAction = "stash"
-	                elseif stashdist < 2.0 then
-	                    QBCore.Functions.DrawText3D(v.x, v.y, v.z, "Stash")
-	                    currentAction = "none"
-	                end
-	            else
-	                Wait(1000)
-	            end
-	        end
+            stashdist = #(pos - vector3(v.x, v.y, v.z))
+            if stashdist < 10.0 then
+                DrawMarker(2, v.x, v.y, v.z - 0.2 , 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, 200, 200, 200, 222, false, false, false, true, false, false, false)
+                if stashdist < 1.5 then
+                    exports['qb-core']:DrawText('<b style=color:rgb(255,0,0);>[E]</b> - STASH','left')
+                    currentAction = "stash"
+                elseif stashdist < 2.0 then
+                    currentAction = "none"
+                    exports['qb-core']:HideText()
+                end
+            else
+                Citizen.Wait(1000)
+            end
         else
-            Wait(2500)
+            Citizen.Wait(2500)
         end
     end
 end)
@@ -162,6 +160,8 @@ RegisterNetEvent("fl-gangs:client:SpawnListVehicle", function(model)
         SetVehicleDirtLevel(veh, 0.0)
     end, coords, true)
 end)
+
+RegisterKeyMapping("+GangInteract", "Interaction for gang script", "keyboard", "e")
 
 RegisterCommand("+GangInteract", function()
     if currentAction == "stash" then

@@ -19,6 +19,7 @@ ensure qb-drugs
 ```
 Config = Config or {}
 
+Config.Fuel = 'ps-fuel' --ps-fuel, lj-fuel, LegacyFuel
 
 Config.stash ={
     ["ballas"] = vector3(113.3059, -1970.89, 21.3276),
